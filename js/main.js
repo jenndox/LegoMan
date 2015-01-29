@@ -1,11 +1,58 @@
-var lightFunnelColor = "#FDE46A";
-var funnelColor = "#FFE330";
-var darkFunnelColor =  "#AD9625";
+var lightColors = [];
+var mainColors = [];
+var darkColors = []
+var elements = [];
+var currentColorIndex = 0;
 
 function intialDraw() {
     window.addEventListener('resize', legoMan, false);
+
+    // Add event listener for `click` events.
+    document.getElementById('mainCanvas').addEventListener('click', function(event) {
+        var x = event.pageX,
+            y = event.pageY;
+
+
+        for (var idx = 0; idx < elements.length; idx++)
+        {
+            var element = elements[idx];
+            if (y > element.top && y < element.top + element.height 
+                && x > element.left && x < element.left + element.width) {
+                currentColorIndex = idx;
+                legoMan();
+                break;
+            }
+        }
+    }, false);
+
+    addColors();
+
 	legoMan();
 };
+
+function addColors() {
+
+    // Yellows
+    lightColors.push("#FDE46A");
+    mainColors.push("#FFE330");
+    darkColors.push("#AD9625");
+
+    // Blues
+    lightColors.push("#05EFFF");
+    mainColors.push("#00A2BA");
+    darkColors.push("#3E00BA");
+
+    // Reds
+    lightColors.push("#F43E3E");
+    mainColors.push("#FE0303");
+    darkColors.push("#A10606");
+
+    // Greens
+    lightColors.push("#78E435");
+    mainColors.push("#61BA00");
+    darkColors.push("#00903A");
+
+}
 
 function legoMan() {
 	var canvas = document.getElementById('mainCanvas'),
@@ -55,7 +102,7 @@ function drawFigFace(ctx, height, width, initialX, initialY) {
     ctx.closePath();
     ctx.stroke();
     ctx.fill();
-}
+};
 
 function drawLegoMan(ctx) {
 
@@ -64,7 +111,7 @@ function drawLegoMan(ctx) {
 
     var initialX = 0.45 * canvasWidth, initialY = 0.1 * canvasHeight;
     var height = 0.1 * canvasHeight, width = 0.1 * canvasWidth;
-    setupDrawingStyle(ctx, initialX, initialY, width, height, 0.75);
+    setupDrawingStyle(ctx, initialX, initialY, width, height, 0.75, currentColorIndex);
     
     outlineLegoTop(ctx, height, width, initialX, initialY);
 
@@ -75,15 +122,40 @@ function drawLegoMan(ctx) {
 
     drawFigFace(ctx, height, width, headX, headY);
 
+    var h = 0.1 * canvasHeight, w = 0.8 * canvasWidth;
+    drawColorButtons(ctx, 0.2 * canvasWidth, 0.8 * canvasHeight, w, h);
 };
 
-function setupDrawingStyle(ctx, initialX, initialY, width, height, colorStop) {
+function drawColorButtons(ctx, x, y, w, h) {
+    for(var idx=0; idx < lightColors.length; idx++)
+    {
+        elements.push({
+            colorIndex: idx,
+            width: 32,
+            height: 32,
+            top: y+ h * 0.5,
+            left: x + w*0.2 + 64 * idx
+        });
+    }
+
+    // Render elements.
+    elements.forEach(function(element) {
+        ctx.fillStyle = lightColors[element.colorIndex];
+        ctx.strokeStyle = darkColors[element.colorIndex];
+        ctx.beginPath();
+        ctx.rect(element.left,element.top,element.height,element.width);
+        ctx.stroke();
+        ctx.fill();
+    });
+};
+
+function setupDrawingStyle(ctx, initialX, initialY, width, height, colorStop, colorIndex) {
     var lineargradient = ctx.createLinearGradient(0,0,initialX+width,initialY+height);
-    lineargradient.addColorStop(0,lightFunnelColor);
-    lineargradient.addColorStop(colorStop,funnelColor);
-    lineargradient.addColorStop(1,darkFunnelColor);
+    lineargradient.addColorStop(0,lightColors[colorIndex]);
+    lineargradient.addColorStop(colorStop,mainColors[colorIndex]);
+    lineargradient.addColorStop(1,darkColors[colorIndex]);
     ctx.fillStyle = lineargradient;
-    ctx.strokeStyle = darkFunnelColor;
+    ctx.strokeStyle = darkColors[colorIndex];
     ctx.lineWidth = 6;
 
     ctx.lineCap = 'round';
