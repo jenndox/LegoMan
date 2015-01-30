@@ -2,7 +2,7 @@ var lightColors = [];
 var mainColors = [];
 var darkColors = []
 var elements = [];
-var currentColorIndex = 0;
+var currentColorIndex = 1;
 
 var hats = [];
 var hatColors = [];
@@ -74,6 +74,15 @@ function addColors() {
     mainColors.push("#61BA00");
     darkColors.push("#00903A");
 
+    // Pinks
+    lightColors.push("#F8B9CF");
+    mainColors.push("#EA80B0");
+    darkColors.push("#EF4F91");
+
+    // Purple
+    lightColors.push("#B9B5FC");
+    mainColors.push("#A080CF");
+    darkColors.push("#705391");
 }
 
 function addHats() {
