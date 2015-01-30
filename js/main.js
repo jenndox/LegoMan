@@ -5,7 +5,9 @@ var elements = [];
 var currentColorIndex = 0;
 
 var hats = [];
-var currentHatIndex = 0;
+var hatColors = [];
+var currentHatIndex = 1;
+var currentHatColorIndex = 0;
 
 function intialDraw() {
     window.addEventListener('resize', legoMan, false);
@@ -67,6 +69,8 @@ function addHats() {
     hats.push("helmet");
     hats.push("ballCap");
     hats.push("hair");
+
+    hatColors.push("white");
 };
 
 function legoMan() {
@@ -98,8 +102,11 @@ function outlineLegoHead(ctx, height, width, initialX, initialY) {
 };
 
 function drawFigFace(ctx, height, width, initialX, initialY) {
+    ctx.fillStyle = mainColors[0];
+    ctx.strokeStyle = darkColors[0];
+
     // The smile
-    ctx.lineWidth = 4;
+
     ctx.beginPath();
     ctx.arc(initialX + width * 0.5,initialY + height * 0.55,40,0.2*Math.PI,0.8*Math.PI,false);
     ctx.stroke();
@@ -135,13 +142,12 @@ function drawLegoMan(ctx) {
 
     outlineLegoHead(ctx, height, width, headX, headY);
 
+    fillFace(ctx, headX, headY, width, height);
+
     // Draw the face
     if (currentColorIndex > 0) {
-        drawFigFace(ctx, height, width, headX, headY);
-    }
-    else {
         // Walter put in a special request that the black head have no face.
-        fillFace(ctx, headX, headY, width, height);
+        drawFigFace(ctx, height, width, headX, headY);
     }
 
     // Optionally add headgear
@@ -221,6 +227,47 @@ function drawCylinder(ctx, x, y, w, h) {
     ctx.lineTo(x + w, y + h - h / 8);
 };
 
+function drawHelmet(ctx, x, y, w, h) {
+    var i, xPos, yPos, pi = Math.PI, twoPi = 2 * pi;
+
+    for (i = 0; i < pi; i += 0.001) {
+        xPos = (x + w / 2) - (w / 2 * Math.cos(i));
+        yPos = (y + h / 8) + (h / 16 * Math.sin(i));
+
+        if (i === 0) {
+            ctx.moveTo(xPos, yPos);
+        } else {
+            ctx.lineTo(xPos, yPos);
+        }
+    }
+
+    for (i = pi; i < twoPi; i += 0.001) {
+        xPos = (x + w / 2) - (w / 2 * Math.cos(i));
+        yPos = (y + h / 8) + (h / 2.5 * Math.sin(i));
+
+        if (i === 0) {
+            ctx.moveTo(xPos, yPos);
+        } else {
+            ctx.lineTo(xPos, yPos);
+        }
+    }
+    ctx.moveTo(x, y + h / 8);
+    ctx.lineTo(x, y + h - h / 8);
+
+    for (i = 0; i < pi; i += 0.001) {
+        xPos = (x + w / 2) - (w / 2 * Math.cos(i));
+        yPos = (y + h - h / 8) + (h / 8 * Math.sin(i));
+
+        if (i === 0) {
+            ctx.moveTo(xPos, yPos);
+        } else {
+            ctx.lineTo(xPos, yPos);
+        }
+    }
+    ctx.moveTo(x + w, y + h / 8);
+    ctx.lineTo(x + w, y + h - h / 8);
+};
+
 function fillFace(ctx, x, y, w, h) {
     var xPos = (x + w / 2) - (w / 2 * Math.cos(0));
     var yPos = (y + h / 8) + (h / 8 * Math.sin(0));
@@ -231,6 +278,23 @@ function fillFace(ctx, x, y, w, h) {
     ctx.fill();
 };
 
-function drawHat(ctx, initialX, initialY, canvasWidth, canvasHeight) {
+function drawHat(ctx, x, y, w, h) {
+    switch (currentHatIndex) {
+        case 1:
+            ctx.fillStyle = hatColors[currentHatColorIndex];
+            ctx.strokeStyle = hatColors[currentHatColorIndex];
 
+            // Draw a helmet
+            w = 0.2 * w;
+            h = 0.3 * h;
+            ctx.beginPath();
+            drawHelmet(ctx, x - w/4, y + h/8, w, h);
+            ctx.fill();
+            ctx.stroke();
+            break;
+
+        default:
+        //Not yet implemented
+        break;
+    }
 };
