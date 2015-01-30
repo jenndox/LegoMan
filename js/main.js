@@ -4,6 +4,9 @@ var darkColors = []
 var elements = [];
 var currentColorIndex = 0;
 
+var hats = [];
+var currentHatIndex = 0;
+
 function intialDraw() {
     window.addEventListener('resize', legoMan, false);
 
@@ -26,6 +29,7 @@ function intialDraw() {
     }, false);
 
     addColors();
+    addHats();
 
 	legoMan();
 };
@@ -57,6 +61,13 @@ function addColors() {
     darkColors.push("#00903A");
 
 }
+
+function addHats() {
+    hats.push("baldie");
+    hats.push("helmet");
+    hats.push("ballCap");
+    hats.push("hair");
+};
 
 function legoMan() {
 	var canvas = document.getElementById('mainCanvas'),
@@ -114,7 +125,7 @@ function drawLegoMan(ctx) {
     var canvasHeight = $('#mainCanvas').height();
 
     var initialX = 0.45 * canvasWidth, initialY = 0.1 * canvasHeight;
-    var height = 0.1 * canvasHeight, width = 0.1 * canvasWidth;
+    var height = 0.08 * canvasHeight, width = 0.1 * canvasWidth;
     setupDrawingStyle(ctx, initialX, initialY, width, height, 0.75, currentColorIndex);
     
     outlineLegoTop(ctx, height, width, initialX, initialY);
@@ -124,11 +135,18 @@ function drawLegoMan(ctx) {
 
     outlineLegoHead(ctx, height, width, headX, headY);
 
+    // Draw the face
     if (currentColorIndex > 0) {
         drawFigFace(ctx, height, width, headX, headY);
     }
     else {
+        // Walter put in a special request that the black head have no face.
         fillFace(ctx, headX, headY, width, height);
+    }
+
+    // Optionally add headgear
+    if (currentHatIndex > 0) {
+        drawHat(ctx, initialX, initialY, canvasWidth, canvasHeight);
     }
 
     var h = 0.1 * canvasHeight, w = 0.8 * canvasWidth;
@@ -211,4 +229,8 @@ function fillFace(ctx, x, y, w, h) {
     ctx.beginPath();
     ctx.rect(xPos, yPos, width, height);
     ctx.fill();
+};
+
+function drawHat(ctx, initialX, initialY, canvasWidth, canvasHeight) {
+
 };
