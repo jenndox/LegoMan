@@ -175,6 +175,7 @@ function drawLegoMan(ctx) {
 };
 
 function drawColorButtons(ctx, x, y, w, h) {
+    // Buttons to pick colors
     for(var idx=0; idx < lightColors.length; idx++)
     {
         elements.push({
@@ -182,7 +183,7 @@ function drawColorButtons(ctx, x, y, w, h) {
             width: 32,
             height: 32,
             top: y+ h * 0.5,
-            left: x + w*0.2 + 64 * idx
+            left: x + 64 * idx
         });
     }
 
@@ -195,6 +196,44 @@ function drawColorButtons(ctx, x, y, w, h) {
         ctx.stroke();
         ctx.fill();
     });
+
+    // Buttons to pick hats
+    for(var idx=0; idx < hats.length; idx++)
+    {
+        elements.push({
+            hatIndex: idx,
+            width: 32,
+            height: 32,
+            top: y+ h * 0.5,
+            left: x + 64 * (idx + lightColors.length)
+        });
+
+        element = elements[elements.length-1];
+
+        switch(idx) {
+            case 0:
+                // Draw bare head
+                ctx.fillStyle = "#FFE330";
+                ctx.strokeStyle = "black";
+                ctx.beginPath();
+                drawCylinder(ctx, element.left,element.top,element.height,element.width);
+                ctx.stroke();
+                ctx.fill(); 
+                break;
+            case 1:
+                // Draw a helmet
+                ctx.fillStyle = "white";
+                ctx.strokeStyle = "black";
+                ctx.beginPath();
+                drawHelmet(ctx, element.left,element.top,element.height,element.width);
+                ctx.stroke();
+                ctx.fill();
+                break;
+            default:
+                // Not implemented
+                break;
+        }
+    }
 };
 
 function setupDrawingStyle(ctx, initialX, initialY, width, height, colorStop, colorIndex) {
