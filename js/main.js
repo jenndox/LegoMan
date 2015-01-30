@@ -23,7 +23,13 @@ function intialDraw() {
             var element = elements[idx];
             if (y > element.top && y < element.top + element.height 
                 && x > element.left && x < element.left + element.width) {
-                currentColorIndex = idx;
+
+                if (idx < lightColors.length) {
+                    currentColorIndex = idx;
+                }
+                else {
+                    currentHatIndex = idx - lightColors.length;
+                }
                 legoMan();
                 break;
             }
@@ -34,6 +40,12 @@ function intialDraw() {
     addHats();
 
 	legoMan();
+};
+
+function clearArrays() {
+    while(elements.length > 0) {
+        elements.pop();
+    }
 };
 
 function addColors() {
@@ -113,14 +125,14 @@ function drawFigFace(ctx, height, width, initialX, initialY) {
 
     // The Left eye
     ctx.beginPath();
-    ctx.arc(initialX + width * 0.35,initialY + height * 0.5,10,0*Math.PI,2*Math.PI,false);
+    ctx.arc(initialX + width * 0.35,initialY + height * 0.5,8,0*Math.PI,2*Math.PI,false);
     ctx.closePath();
     ctx.stroke();
     ctx.fill();
  
     // The Right Eye
     ctx.beginPath();
-    ctx.arc(initialX + width * 0.65,initialY + height * 0.5,10,0*Math.PI,2*Math.PI,false);
+    ctx.arc(initialX + width * 0.65,initialY + height * 0.5,8,0*Math.PI,2*Math.PI,false);
     ctx.closePath();
     ctx.stroke();
     ctx.fill();
@@ -130,6 +142,9 @@ function drawLegoMan(ctx) {
 
     var canvasWidth = $('#mainCanvas').width();
     var canvasHeight = $('#mainCanvas').height();
+
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    clearArrays();
 
     var initialX = 0.45 * canvasWidth, initialY = 0.1 * canvasHeight;
     var height = 0.08 * canvasHeight, width = 0.1 * canvasWidth;
@@ -286,15 +301,15 @@ function drawHat(ctx, x, y, w, h) {
 
             // Draw a helmet
             w = 0.2 * w;
-            h = 0.3 * h;
+            h = 0.27 * h;
             ctx.beginPath();
-            drawHelmet(ctx, x - w/4, y + h/8, w, h);
+            drawHelmet(ctx, x - w/4, y + h/4, w, h);
             ctx.fill();
             ctx.stroke();
             break;
 
         default:
-        //Not yet implemented
-        break;
+            //Not yet implemented
+            break;
     }
 };
