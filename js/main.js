@@ -31,6 +31,10 @@ function intialDraw() {
 };
 
 function addColors() {
+    // Blacks
+    lightColors.push("#777777");
+    mainColors.push("#333333");
+    darkColors.push("#000000");    
 
     // Yellows
     lightColors.push("#FDE46A");
@@ -120,7 +124,12 @@ function drawLegoMan(ctx) {
 
     outlineLegoHead(ctx, height, width, headX, headY);
 
-    drawFigFace(ctx, height, width, headX, headY);
+    if (currentColorIndex > 0) {
+        drawFigFace(ctx, height, width, headX, headY);
+    }
+    else {
+        fillFace(ctx, headX, headY, width, height);
+    }
 
     var h = 0.1 * canvasHeight, w = 0.8 * canvasWidth;
     drawColorButtons(ctx, 0.2 * canvasWidth, 0.8 * canvasHeight, w, h);
@@ -192,4 +201,14 @@ function drawCylinder(ctx, x, y, w, h) {
     }
     ctx.moveTo(x + w, y + h / 8);
     ctx.lineTo(x + w, y + h - h / 8);
-}
+};
+
+function fillFace(ctx, x, y, w, h) {
+    var xPos = (x + w / 2) - (w / 2 * Math.cos(0));
+    var yPos = (y + h / 8) + (h / 8 * Math.sin(0));
+    var width = w;
+    var height = h - 2 * (yPos - y) + 1;
+    ctx.beginPath();
+    ctx.rect(xPos, yPos, width, height);
+    ctx.fill();
+};
